@@ -37,7 +37,7 @@ The application follows a client-server model with a fully serverless backend pr
 * **Cloud Firestore acts as the single source of truth for all persistent data (users, products, orders, reviews), using streams for real-time UI updates.**
 * **Cloud Functions provide reactive, automated backend logic, decoupling the responsibility of sending notifications from the client app. When an administrator updates an order in Firestore, a function is triggered in the cloud to send the push notification.**
 
-  ## 📂 Directory Structure
+### 📂 Directory Structure
 
 The project's folder structure follows Flutter community conventions for organization and scalability.
 
