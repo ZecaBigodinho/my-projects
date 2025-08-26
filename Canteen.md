@@ -29,3 +29,10 @@ The project was built incrementally, starting with a local mock database and evo
 
 ### * **Backend & Notification System:**
 * **Real-time push notifications sent automatically to the customer when the order status is updated to "Ready for Pickup," powered by Firebase Cloud Functions.**
+
+### 🏛️ Architecture
+The application follows a client-server model with a fully serverless backend provided by Firebase.
+
+* **The Flutter app (client) communicates directly with Firebase services (Auth, Firestore, Storage) for most operations.**
+* **Cloud Firestore acts as the single source of truth for all persistent data (users, products, orders, reviews), using streams for real-time UI updates.**
+* **Cloud Functions provide reactive, automated backend logic, decoupling the responsibility of sending notifications from the client app. When an administrator updates an order in Firestore, a function is triggered in the cloud to send the push notification.**
