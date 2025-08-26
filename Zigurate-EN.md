@@ -1,4 +1,4 @@
-##🚀 Project: Educational Management Platform (Classroom App)
+### 🚀 Project: Educational Management Platform (Classroom App)
 
 * **Status:** Completed
 * **Technologies Used:** <img src="https://skillicons.dev/icons?i=python,mongodb&theme=dark" />
