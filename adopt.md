@@ -35,11 +35,11 @@ lib/
     ├── app_drawer.dart
     └── nova_publicacao_widget.dart
 ```
-**main.dart:** The main file that initializes Firebase and defines all the application's navigation routes using the go_router package.
-**/models:** Contains the classes that model the application's data, such as Pet and Ong. It ensures a consistent and strongly-typed data structure.
-**/pages:** Each file represents a complete screen of the application, responsible for composing the interface and managing its local state.
-**/services:** An abstraction layer that handles all business logic and external communication, such as Firebase authentication, Firestore operations, and image uploads to Cloudinary.
-**/widgets:** Stores custom and reusable UI components, like the navigation menu (AppDrawer), to keep the code clean and avoid repetition (DRY principle).
+### **main.dart:** The main file that initializes Firebase and defines all the application's navigation routes using the go_router package.
+### **/models:** Contains the classes that model the application's data, such as Pet and Ong. It ensures a consistent and strongly-typed data structure.
+### **/pages:** Each file represents a complete screen of the application, responsible for composing the interface and managing its local state.
+### **/services:** An abstraction layer that handles all business logic and external communication, such as Firebase authentication, Firestore operations, and image uploads to Cloudinary.
+### **/widgets:** Stores custom and reusable UI components, like the navigation menu (AppDrawer), to keep the code clean and avoid repetition (DRY principle).
 
 ### 🛠️ Technologies Used
 
