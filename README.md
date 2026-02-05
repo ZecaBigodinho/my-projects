@@ -21,5 +21,5 @@ Lessons learned and challenges faced.
 ### 📬 Contact
 Did you like a project or have a suggestion? Feel free to get in touch!
 
-### LinkedIn: https://www.linkedin.com/in/pedro-paulo-968aaa1b7](https://www.linkedin.com/in/pedropaulodev/
+### LinkedIn: https://www.linkedin.com/in/pedropaulodev/
 #### Email: pedropaulo4hire@gmail.com
