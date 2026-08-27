@@ -1,146 +1,632 @@
 # 📘 Veritas Flow
 
-**Veritas Flow** is a Fullstack project management system (SaaS) focused on productivity, collaboration, and security. The project evolved from a simple local Kanban to a robust application with authentication, teams, and protection against web vulnerabilities.
+<p align="center">
+  <strong>Fullstack SaaS • Project Management • Security • Collaboration</strong>
+</p>
+
+**Status:** Completed
+
+**Technologies:**
+`Go` `React` `PostgreSQL` `JWT` `Tailwind CSS` `GORM`
 
 ---
 
-## 🚀 Main Features
+## 🚀 Project Overview
 
-### 1. Task Management (Kanban)
-* **Fluid Drag & Drop:** Drag tasks between columns (To Do, In Progress, Done) with native touch support (Mobile).
-* **Categorization:** Filters by Priority (High, Medium, Low) and Category (Dev, Design, Mkt, etc).
-* **Smart Deadlines:** Automatic detection of overdue tasks with visual alerts.
+**Veritas Flow** is a fullstack project management application designed around productivity, collaboration, responsive user experience and secure multi-user access.
 
-### 2. Collaboration (New 👥)
-* **Hybrid Mode:** Switch between **"Personal Board"** (only your tasks) and **"Team Board"** (shared tasks).
-* **Assignment:** See who created the task on the visual card.
+The project evolved from a simple local Kanban board into a more complete SaaS-style application featuring:
 
-### 3. Authentication & Security (New 🛡️)
-* **Secure Login:** Authentication via **JWT (JSON Web Token)**.
-* **Data Protection:** Passwords encrypted with **Bcrypt**.
-* **Anti-XSS Shield:** HTML input sanitization (backend) to prevent script injection.
-* **Rate Limiting:** Protection against brute force and DDoS attacks (request per second limit).
-* **Infrastructure:** Secure connection via SSL with cloud PostgreSQL database (Neon).
+* User authentication
+* Personal and team workspaces
+* Task ownership
+* Persistent cloud data
+* Security controls
+* Responsive interfaces
+* Real-time visual interaction
+* Production-oriented backend architecture
 
-### 4. UX/UI & Mobile First
-* **Responsive Design:** Layout that adapts to Mobile, Tablets, and Desktops.
-* **Dark Mode:** Automatic/manual dark theme.
-* **Drawer Menu:** Sliding sidebar for mobile devices.
-* **Visual Feedback:** Success/error toasts and loading skeletons.
+The project demonstrates the evolution of a frontend prototype into a complete client-server application backed by a secure API and PostgreSQL database.
 
 ---
 
-## 🛠️ Tech Stack
+# 🎯 Project Evolution
 
-### Backend (Go)
-* **Language:** Golang 1.23+
-* **Web Server:** Gorilla Mux
-* **ORM:** GORM
-* **Database:** PostgreSQL (Production/Neon)
-* **Security:**
-    * `golang.org/x/crypto/bcrypt` (Password Hashing)
-    * `golang-jwt/jwt` (Session Tokens)
-    * `microcosm-cc/bluemonday` (HTML Sanitization)
-    * `golang.org/x/time/rate` (Rate Limiter)
+The initial version of Veritas Flow focused primarily on local Kanban task management.
 
-### Frontend (React)
-* **Framework:** React.js
-* **Styling:** Tailwind CSS
-* **Interactivity:** `@dnd-kit/core` (Accessible Drag and Drop)
-* **Global State:** React Context API (AuthContext)
-* **Notifications:** `react-hot-toast`
+Over time, the architecture evolved to support authentication, persistent storage, collaboration and security.
 
----
-
-## 📂 Project Structure
-
-```text
-desafio-fullstack-veritas/
-├── backend/
-│   ├── main.go            # Main entry point, Server Configuration, CORS and Rate Limiter
-│   ├── handlers.go        # Route logic (CRUD, Sanitization and Team Filter)
-│   ├── models.go          # Table definitions (User, Task) and Relationships
-│   ├── auth.go            # Login, Registration and JWT generation logic
-│   ├── go.mod             # Dependency manager
-│   └── .env               # Environment variables (DO NOT COMMIT)
-│
-├── frontend/
-│   ├── src/
-│   │   ├── api.js         # Request hub (Automatically injects JWT Token)
-│   │   ├── App.js         # Conditional routing (Login vs Kanban)
-│   │   ├── index.css      # Tailwind configuration
-│   │   ├── context/
-│   │   │   └── AuthContext.js  # Manages logged user state
-│   │   │
-│   │   └── components/
-│   │       ├── KanbanBoard.js    # Main Panel (Manages Solo/Team modes)
-│   │       ├── TaskColumn.js     # Task column
-│   │       ├── Task.js           # Task card (with author badge)
-│   │       ├── TaskForm.js       # Creation modal (with "Share" checkbox)
-│   │       ├── LoginPage.js      # Login and Registration screen
-│   │       ├── StatsDashboard.js # Top metrics
-│   │       ├── OverdueSidebar.js # Overdue drawer
-│   │       └── ... (Other auxiliary components)
+```text id="vf-evolution"
+Local Kanban
+     ↓
+Persistent Backend
+     ↓
+User Authentication
+     ↓
+PostgreSQL Database
+     ↓
+Personal Workspaces
+     ↓
+Team Collaboration
+     ↓
+Security Controls
+     ↓
+Responsive SaaS Application
 ```
 
-## Step 2: Setting up the Backend (API)
-* **1. Navigate to the backend folder:**
+This evolution required redesigning the project from a standalone task board into a multi-user system with clear separation between frontend, API and persistent data.
+
+---
+
+# ✨ Main Features
+
+## 📋 Kanban Task Management
+
+The main application experience is based on a Kanban workflow.
+
+Tasks are organized across:
+
+```text id="vf-kanban"
+To Do
+  ↓
+In Progress
+  ↓
+Done
+```
+
+### Features
+
+* Drag-and-drop task movement
+* Touch support for mobile devices
+* Task priority levels
+* Task categories
+* Deadline management
+* Automatic overdue detection
+* Visual alerts for delayed tasks
+
+The interface uses `@dnd-kit/core` to provide accessible drag-and-drop interactions.
+
+---
+
+# 👥 Personal & Team Collaboration
+
+Veritas Flow supports two working contexts.
+
+## Personal Board
+
+Displays tasks associated with the authenticated user.
+
+This allows each user to maintain an independent workspace.
+
+## Team Board
+
+Displays tasks intended for collaboration.
+
+Users can identify who created each shared task directly from the Kanban card.
+
+```text id="vf-workspaces"
+Authenticated User
+        │
+        ▼
+   Workspace Mode
+      /      \
+     /        \
+Personal      Team
+Board         Board
+  │             │
+  ▼             ▼
+Own Tasks   Shared Tasks
+```
+
+This required the backend to apply different filtering rules depending on the requested workspace.
+
+---
+
+# 🔐 Authentication
+
+The application implements token-based authentication using **JSON Web Tokens (JWT)**.
+
+The authentication workflow can be summarized as:
+
+```text id="vf-auth"
+User Credentials
+       │
+       ▼
+Backend Authentication
+       │
+       ├── Validate User
+       │
+       └── Verify Password Hash
+               │
+               ▼
+           JWT Issued
+               │
+               ▼
+        React Application
+               │
+               ▼
+    Authenticated API Requests
+```
+
+The frontend automatically includes the authentication token in protected API requests.
+
+---
+
+# 🔑 Password Security
+
+Passwords are never intended to be stored in plaintext.
+
+The backend uses **Bcrypt password hashing** through:
+
+```text id="vf-bcrypt"
+golang.org/x/crypto/bcrypt
+```
+
+During registration, the password is hashed before persistence.
+
+During authentication, the submitted password is compared against the stored hash.
+
+This provides a safer credential storage model than reversible encryption or plaintext password storage.
+
+---
+
+# 🛡️ Security Controls
+
+Security was treated as an important architectural aspect of the project rather than an afterthought.
+
+The backend includes multiple protection layers.
+
+---
+
+## 🧹 Input Sanitization
+
+User-controlled textual fields such as task titles and descriptions are sanitized before being persisted.
+
+The backend uses:
+
+```text id="vf-blue"
+bluemonday.UGCPolicy()
+```
+
+This helps reduce the risk of unsafe HTML being stored and later rendered by application clients.
+
+Examples of potentially unsafe content include script elements, embedded frames and event-handler attributes.
+
+---
+
+## 🚦 Rate Limiting
+
+The backend uses Go's rate-limiting utilities to control the frequency of incoming requests.
+
+```text id="vf-rate"
+golang.org/x/time/rate
+```
+
+This provides a protection layer against:
+
+* Excessive request bursts
+* Automated abuse
+* Brute-force attempts
+* Accidental client request loops
+
+Rate limiting is an application-level defense and complements, rather than replaces, infrastructure-level traffic protection.
+
+---
+
+## 🧑‍💻 Data Segregation
+
+Authentication alone is not enough in a multi-user system.
+
+The API also verifies the authenticated user's identity when retrieving or modifying data.
+
+In personal mode:
+
+```text id="vf-isolation"
+Request
+   │
+   ▼
+Validate JWT
+   │
+   ▼
+Identify User
+   │
+   ▼
+Filter Database Query
+   │
+   ▼
+Return Authorized Data
+```
+
+This prevents personal task data from simply being returned to every authenticated account.
+
+---
+
+## 🌐 Security Headers
+
+The backend also sets HTTP response headers intended to improve browser-side security behavior.
+
+These controls form an additional defensive layer around the API and frontend interaction.
+
+---
+
+# 🏛️ System Architecture
+
+Veritas Flow follows a conventional fullstack client-server architecture.
+
+```text id="vf-architecture"
+┌─────────────────────────────┐
+│       React Frontend        │
+│                             │
+│ Kanban                      │
+│ Authentication              │
+│ Dashboard                   │
+│ Responsive UI               │
+└──────────────┬──────────────┘
+               │
+               │ HTTP / JSON
+               │ JWT
+               ▼
+┌─────────────────────────────┐
+│          Go API             │
+│                             │
+│ Gorilla Mux                 │
+│ Authentication              │
+│ Authorization               │
+│ Sanitization                │
+│ Rate Limiting               │
+│ Business Logic              │
+└──────────────┬──────────────┘
+               │
+               │ GORM
+               ▼
+┌─────────────────────────────┐
+│        PostgreSQL           │
+│                             │
+│       Neon Cloud DB         │
+└─────────────────────────────┘
+```
+
+---
+
+# ⚙️ Backend
+
+The backend is implemented in **Go**, providing the application's API, authentication and business logic.
+
+### Responsibilities
+
+* HTTP routing
+* User registration
+* Authentication
+* JWT generation and validation
+* Task CRUD operations
+* Workspace filtering
+* Input sanitization
+* Rate limiting
+* Database communication
+
+---
+
+## Backend Stack
+
+| Area                 | Technology               |
+| -------------------- | ------------------------ |
+| **Language**         | Go 1.23+                 |
+| **HTTP Router**      | Gorilla Mux              |
+| **ORM**              | GORM                     |
+| **Database**         | PostgreSQL               |
+| **Cloud Database**   | Neon                     |
+| **Authentication**   | JWT                      |
+| **Password Hashing** | Bcrypt                   |
+| **Sanitization**     | Bluemonday               |
+| **Rate Limiting**    | `golang.org/x/time/rate` |
+
+---
+
+# 🎨 Frontend
+
+The frontend is built with React and provides the complete application interface.
+
+### Responsibilities
+
+* Authentication interface
+* Kanban rendering
+* Drag-and-drop interactions
+* Workspace switching
+* Task creation
+* Filtering
+* Dashboard metrics
+* Responsive navigation
+* Error and success feedback
+
+---
+
+## Frontend Stack
+
+| Area                            | Technology        |
+| ------------------------------- | ----------------- |
+| **Framework**                   | React             |
+| **Styling**                     | Tailwind CSS      |
+| **Drag & Drop**                 | `@dnd-kit/core`   |
+| **Global Authentication State** | React Context API |
+| **Notifications**               | react-hot-toast   |
+
+---
+
+# 📱 Responsive UX
+
+The application was designed to work across:
+
+* Desktop
+* Tablet
+* Mobile
+
+The interface adapts according to viewport size and includes mobile-oriented navigation behavior.
+
+### UX Features
+
+* Responsive layout
+* Mobile drawer menu
+* Touch-compatible drag and drop
+* Dark mode
+* Loading skeletons
+* Success notifications
+* Error notifications
+* Visual deadline indicators
+
+---
+
+# 📊 Productivity Features
+
+Beyond the main Kanban interface, the project includes additional productivity-oriented UI elements.
+
+## Statistics Dashboard
+
+Displays high-level task information and project metrics.
+
+## Overdue Sidebar
+
+Provides a dedicated view for tasks that have exceeded their deadlines.
+
+## Filters
+
+Tasks can be filtered according to attributes such as:
+
+* Priority
+* Category
+
+These features reduce the need to manually inspect every task on the board.
+
+---
+
+# 📂 Project Structure
+
+```text id="vf-tree"
+desafio-fullstack-veritas/
+├── backend/
+│   ├── main.go
+│   ├── handlers.go
+│   ├── models.go
+│   ├── auth.go
+│   ├── go.mod
+│   └── .env
+│
+└── frontend/
+    ├── src/
+    │   ├── api.js
+    │   ├── App.js
+    │   ├── index.css
+    │   │
+    │   ├── context/
+    │   │   └── AuthContext.js
+    │   │
+    │   └── components/
+    │       ├── KanbanBoard.js
+    │       ├── TaskColumn.js
+    │       ├── Task.js
+    │       ├── TaskForm.js
+    │       ├── LoginPage.js
+    │       ├── StatsDashboard.js
+    │       ├── OverdueSidebar.js
+    │       └── ...
+```
+
+---
+
+# 🧩 Separation of Responsibilities
+
+The project separates application responsibilities across multiple layers.
+
+```text id="vf-separation"
+React Components
+       ↓
+Frontend State
+       ↓
+API Layer
+       ↓
+HTTP Backend
+       ↓
+Business Logic
+       ↓
+Database Access
+       ↓
+PostgreSQL
+```
+
+This structure makes the system easier to reason about than placing frontend, authentication, database and security logic into a single application layer.
+
+---
+
+# 🚀 Running the Project
+
+## 1. Backend Configuration
+
+Navigate to the backend:
 
 ```bash
 cd backend
 ```
 
-* **2. Create the security file: Create a file called .env in the root of the backend folder and fill it according to the template:**
+Create a `.env` file:
 
-```text
-# Server Configuration
+```env
 PORT=8080
 
-# Security (Generate a strong random string)
-JWT_SECRET=your_super_difficult_secret_key_here
+JWT_SECRET=replace_with_a_strong_random_secret
 
-# Database (Neon/Postgres link)
-# Example: postgresql://user:pass@host/db?sslmode=require
-DATABASE_URL="your_connection_string_here"
+DATABASE_URL="postgresql://user:password@host/database?sslmode=require"
 ```
 
-* **3. Install dependencies and run the server:**
+> Never commit `.env` files or production credentials to version control.
+
+Install dependencies and start the API:
 
 ```bash
 go mod tidy
 go run .
 ```
 
-You should see the message: 🔒 ```SECURE Server running on port 8080...```
+---
 
-## Step 3: Setting up the Frontend (App)
-* **1. Open a new terminal and navigate to the frontend folder:**
+## 2. Frontend Configuration
+
+Open another terminal:
 
 ```bash
 cd frontend
 ```
 
-* **2. Install dependencies:**
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-* **3. Start the application:**
+Start the application:
 
 ```bash
 npm start
 ```
 
-* **4. Access in your browser: ```http://localhost:3000```**
+By default, the application can then be accessed locally through:
 
-## 🔐 Security Implementation Details
-To ensure the SaaS integrity, the following protection layers were applied:
+```text
+http://localhost:3000
+```
 
-* **1. HTML Sanitization:** All text input (Title, Description) goes through ```bluemonday.UGCPolicy()``` before touching the database. This removes dangerous tags like ```<script>```, ```<iframe>``` and ```onclick```.
+---
 
-* **2. Header Middlewares:** The server injects HTTP headers like ```X-XSS-Protection``` and ```X-Frame-Options``` in all responses.
+# ☁️ Database Infrastructure
 
-* **3. Data Segregation:** The Backend validates the JWT Token in each request to ensure that users in "Personal" mode access strictly their own data.
+The production-oriented configuration uses **PostgreSQL hosted on Neon**.
 
-## Developed with 💙 and lots of jazz playlists.
+Connections are configured through the `DATABASE_URL` environment variable and use SSL when required by the database provider.
+
+Using an external PostgreSQL service allowed the application to move beyond purely local persistence and operate with a cloud-hosted database.
+
+---
+
+# 🧠 Engineering Concepts Demonstrated
+
+Veritas Flow provides practical experience with:
+
+* Fullstack application architecture
+* REST-style API development
+* Authentication
+* Authorization
+* JWT-based sessions
+* Password hashing
+* PostgreSQL
+* ORM-based persistence
+* Cloud databases
+* Input sanitization
+* Application-level rate limiting
+* Data isolation
+* Responsive web interfaces
+* Global frontend state
+* Drag-and-drop interfaces
+* Multi-user collaboration
+* Environment-based configuration
+
+---
+
+# 📚 Key Learnings
+
+One of the most important aspects of this project was understanding that adding authentication transforms the architecture of an application.
+
+Once multiple users exist, the backend must consider not only:
+
+> **"Is this user logged in?"**
+
+but also:
+
+> **"Does this user have permission to access this specific resource?"**
+
+The project therefore strengthened my understanding of the distinction between:
+
+```text id="vf-authz"
+Authentication
+      │
+      └── Who is the user?
+
+Authorization
+      │
+      └── What can this user access?
+
+Data Isolation
+      │
+      └── Which records belong to this user?
+```
+
+Another important lesson was that application security should exist across multiple layers rather than relying on a single mechanism.
+
+---
+
+# 🔭 Future Possibilities
+
+The architecture could be expanded with features such as:
+
+* Organization-level workspaces
+* Fine-grained project permissions
+* Task comments
+* Activity history
+* Invitations
+* Refresh tokens
+* Email verification
+* Automated testing
+* CI/CD pipelines
+* Containerized deployment
+* Observability and logging
+* Audit trails
+* Real-time collaboration
+
+These additions could move the system closer to a production-grade collaborative SaaS platform.
+
+---
+
+# 📌 Project Summary
+
+**Veritas Flow** represents the transition from a simple frontend productivity tool into a complete multi-user fullstack system.
+
+Technically, the project combines:
+
+```text id="vf-summary"
+React
+  ↓
+Authenticated API
+  ↓
+Go Backend
+  ↓
+Authorization & Security
+  ↓
+GORM
+  ↓
+PostgreSQL / Neon
+```
+
+The project demonstrates practical knowledge of **backend development, frontend architecture, authentication, data security, relational persistence and SaaS-style application design**.
+
+---
+
+<p align="center">
+  <i>Building software that is not only functional, but structured, secure and ready to evolve.</i>
+</p>
